@@ -26,7 +26,6 @@ function generateStoryMarkup(story) {
   return $(`
       <li id="${story.storyId}">
         <span id="favoriteStarOutline"><i class="far fa-star"></i></span>
-        <span id="removeStoryIcon"><i class="fas fa-minus-circle"></i></span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -38,6 +37,22 @@ function generateStoryMarkup(story) {
     `);
 }
 
+function generateOwnStoryMarkup(story) {
+  const hostName = story.getHostName();
+  return $(`
+      <li id="${story.storyId}">
+        <span id="favoriteStarOutline"><i class="far fa-star"></i></span>
+        <span id="removeStoryIcon"><i class="fas fa-minus-circle"></i></span>
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+        
+      </li>
+    `);
+}
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
@@ -84,6 +99,8 @@ $addStoryForm.on("click", submitStory);
 
 // delete a story:
 // https://hack-or-snooze-v3.herokuapp.com/stories/storyId with a DELETE method
+// <span id="removeStoryIcon"><i class="fas fa-minus-circle"></i></span>
+// need to add the remove icon only when the story is displayed on the own stories list
 $body.on("click", function(e){
   e.preventDefault();
   if (currentUser){

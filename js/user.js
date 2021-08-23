@@ -27,7 +27,7 @@ async function login(evt) {
   updateUIOnUserLogin();
 }
 
-$loginForm.on("submit", login);
+$loginForm.on("click", login);
 
 /** Handle signup form submission. */
 
@@ -118,9 +118,14 @@ function updateUIOnUserLogin() {
 
 //show created time/list of favorites
 function showUserProfileInfo(){
-  console.log("user info here");
-  showUserFavorites();
-}
+    const userMarkup = $(`
+      <li>Username: "${currentUser.username}"</li>
+      <li>Created At: "${currentUser.createdAt}"</li>
+      `);
+    $userProfileInfoUl.append(userMarkup);
+    showUserFavorites();
+  }
+
 
 function showUserFavorites(){
   if(currentUser.favorites.length >= 1){
@@ -138,4 +143,21 @@ function showUserFavorites(){
 
 function hideUserProfileInfo(){
   $favoriteStoriesList.hide();
+}
+
+
+
+function showUserOwnStories(){
+  if(currentUser.ownStories.length >= 1){
+    $ownStoriesList.empty();
+    // loop through own stories and generate HTML for them - include edit and remove icons
+    for (let story of currentUser.ownStories) {
+      const $story = generateOwnStoryMarkup(story);
+      $ownStoriesList.append($story);
+    }
+    $ownStoriesList.show();
+  } else {
+    $ownStoriesList.append(`<h4>Submit Your First Story</h4>`)
+    $addStoryForm.show();
+  }
 }
